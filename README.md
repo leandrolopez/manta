@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="assets/manta-logo.png" alt="MANTA Logo" width="200"/>
+</p>
+
+
 # **MANTA**
 ### _**Manta: Multi-Agent Negotiation &amp; Task Automation**_
 
