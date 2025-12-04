@@ -98,4 +98,12 @@ Open an issue or pull request to help grow autonomous negotiation systems.
 
 ## License
 
-Apache 2.0
+MANTA is licensed under the **Apache License 2.0**.
+
+This includes:
+- Permission to use, modify, and distribute the software  
+- Commercial and private use  
+- Patent protection from contributors  
+- A NOTICE file with required attributions  
+
+Full license text is available in the `LICENSE` file.
