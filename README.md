@@ -1,9 +1,11 @@
 # manta
 Multi-Agent Negotiation &amp; Task Automation
 
+#Title
+
 MANTA is a modern, modular, high-performance framework for building autonomous multi-agent systems capable of:
 
-•	 Automated negotiation
+•	Automated negotiation
 
 •	Multi-party decision-making
 
@@ -30,6 +32,7 @@ Smart Agents
 Agents can negotiate, collaborate, and coordinate tasks.
 
 Negotiation Engine
+
 Supports:
 
 •	bilateral & multilateral negotiation
@@ -70,4 +73,7 @@ Built with async support and dependency injection where needed.
 
 
 Installation
+```bash
 pip install manta
+```
+
