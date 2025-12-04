@@ -1,7 +1,5 @@
-# manta
-Multi-Agent Negotiation &amp; Task Automation
-
 # Title
+Manta: Multi-Agent Negotiation &amp; Task Automation
 
 MANTA is a modern, modular, high-performance framework for building autonomous multi-agent systems capable of:
 
@@ -26,12 +24,12 @@ It is a modern rewrite and evolution of NegMAS with a focus on:
 •	integration with LLMs and agentic frameworks
 
 
-Key Features
+# Key Features
 
-Smart Agents
+## Smart Agents
 Agents can negotiate, collaborate, and coordinate tasks.
 
-Negotiation Engine
+## Negotiation Engine
 
 Supports:
 
@@ -43,7 +41,7 @@ Supports:
 
 •	domain-agnostic offers & utilities
 
-Task Automation
+## Task Automation
 Each agent can:
 •	plan tasks
 
@@ -54,7 +52,7 @@ Each agent can:
 •	collaborate with other agents
 
 
-Extensible Architecture
+## Extensible Architecture
 Everything is modular:
 
 •	strategies
