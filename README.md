@@ -1,7 +1,7 @@
 # manta
 Multi-Agent Negotiation &amp; Task Automation
 
-#Title
+# Title
 
 MANTA is a modern, modular, high-performance framework for building autonomous multi-agent systems capable of:
 
