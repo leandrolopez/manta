@@ -1,0 +1,13 @@
+[project]
+name = "manta"
+version = "0.1.0"
+description = "MANTA — Multi-Agent Negotiation & Task Automation"
+readme = "README.md"
+authors = [{ name="Antonio L. Lopez", email="lopezcamejo@gmail.com" }]
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+
+[project.urls]
+Homepage = "https://github.com/YOURNAME/manta"
+Issues = "https://github.com/YOURNAME/manta/issues"
+Documentation = "https://YOUR-DOCS-SITE"
