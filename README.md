@@ -13,7 +13,7 @@
 
 •	Complex workflows with autonomy and cooperation
 
-It is a modern rewrite and evolution of NegMAS with a focus on:
+**Manta** is a modern rewrite and evolution of **NegMAS** with a focus on:
 
 •	production architecture
 
