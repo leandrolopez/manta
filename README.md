@@ -43,6 +43,7 @@ Supports:
 
 ## Task Automation
 Each agent can:
+
 •	plan tasks
 
 •	schedule actions
@@ -53,6 +54,7 @@ Each agent can:
 
 
 ## Extensible Architecture
+
 Everything is modular:
 
 •	strategies
@@ -66,12 +68,30 @@ Everything is modular:
 •	task executors
 
 
-Performance Focused
+## Performance Focused
 Built with async support and dependency injection where needed.
 
 
-Installation
+## Installation
 ```bash
 pip install manta
 ```
 
+## Quick Example
+```bash
+from manta.core.agent import Agent
+from manta.negotiation.protocols import BasicNegotiationProtocol
+
+buyer = Agent(name="Buyer")
+seller = Agent(name="Seller")
+
+protocol = BasicNegotiationProtocol(buyer, seller)
+result = protocol.run()
+
+print(result)
+```
+
+## Contributing
+
+Contributions are welcome!
+Open an issue or pull request to help grow autonomous negotiation systems.
