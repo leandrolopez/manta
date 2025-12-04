@@ -1,74 +1,79 @@
 # manta
 Multi-Agent Negotiation &amp; Task Automation
 
+# manta
+Multi-Agent Negotiation &amp; Task Automation
+
 MANTA
 Multi-Agent Negotiation & Task Automation
 
 MANTA is a modern, modular, high-performance framework for building autonomous multi-agent systems capable of:
 
-💬 Automated negotiation
+•	 Automated negotiation
 
-🤝 Multi-party decision-making
+•	Multi-party decision-making
 
-🧠 Task planning and execution
+•	Task planning and execution
 
-🔗 Agent-to-agent interaction protocols
+•	Agent-to-agent interaction protocols
 
-🚀 Complex workflows with autonomy and cooperation
+•	Complex workflows with autonomy and cooperation
 
 It is a modern rewrite and evolution of NegMAS with a focus on:
 
-better architecture
+•	production architecture
 
-extensibility
+•	extensibility
 
-performance
+•	performance
 
-integration with LLMs and agentic frameworks
+•	integration with LLMs and agentic frameworks
 
-🚀 Key Features
-🧠 Smart Agents
 
+Key Features
+
+Smart Agents
 Agents can negotiate, collaborate, and coordinate tasks.
 
-💬 Negotiation Engine
-
+Negotiation Engine
 Supports:
 
-bilateral & multilateral negotiation
+•	bilateral & multilateral negotiation
 
-multiple protocols
+•	multiple protocols
 
-strategy plug-ins
+•	strategy plug-ins
 
-domain-agnostic offers & utilities
+•	domain-agnostic offers & utilities
 
-📋 Task Automation
-
+Task Automation
 Each agent can:
+•	plan tasks
 
-plan tasks
+•	schedule actions
 
-schedule actions
+•	execute workflows
 
-execute workflows
+•	collaborate with other agents
 
-collaborate with other agents
 
-🔌 Extensible Architecture
-
+Extensible Architecture
 Everything is modular:
 
-strategies
+•	strategies
 
-environments
+•	environments
 
-agent behaviors
+•	agent behaviors
 
-negotiation protocols
+•	negotiation protocols
 
-task executors
+•	task executors
 
-⚡ Performance Focused
 
+Performance Focused
 Built with async support and dependency injection where needed.
+
+
+Installation
+pip install manta
