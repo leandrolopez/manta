@@ -1,9 +1,6 @@
 # manta
 Multi-Agent Negotiation &amp; Task Automation
 
-# manta
-Multi-Agent Negotiation &amp; Task Automation
-
 MANTA
 Multi-Agent Negotiation & Task Automation
 
