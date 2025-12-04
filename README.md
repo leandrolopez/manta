@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="manta/assets/manta-logo.png" alt="MANTA Logo" width="200"/>
+  <img src="manta/assets/manta-logo.png" alt="MANTA Logo"/>
 </p>
 
 
