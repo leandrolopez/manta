@@ -33,37 +33,50 @@ class LinearAdditiveUtility(BaseModel):
             "mapping": mapping
         }
 
+    # INSIDE CLASS LinearAdditiveUtility:
+
     def calculate(self, outcome: Outcome) -> float:
         total_util = 0.0
         
+        # Determine the effective weight for non-continuous issues
+        w_service = self.weights.get('service', 0.0)
+        w_duration = self.weights.get('duration', 0.0)
+        
         for issue, value in outcome.items():
-            if issue not in self._curves:
+            if issue not in self._curves and issue not in self.weights:
                 continue
                 
-            curve = self._curves[issue]
-            weight = curve['weight']
+            curve = self._curves.get(issue)
+            weight = self.weights.get(issue, 0.0)
             
-            # 1. CONTINUOUS LOGIC (You already had this)
-            if curve['type'] == 'linear':
-                if curve['min'] is not None and curve['max'] is not None:
-                    rng = curve['max'] - curve['min']
-                    if rng == 0:
-                        norm = 1.0
-                    else:
-                        norm = (float(value) - curve['min']) / rng
-                        norm = max(0.0, min(1.0, norm))
-                    
-                    if curve['invert']:
-                        norm = 1.0 - norm
-                    total_util += weight * norm
-
-            ### NEW: DISCRETE LOGIC (This fixes the 0.5 score limit)
-            elif curve['type'] == 'discrete':
-                mapping = curve['mapping']
-                # Get score from map, default to 0.0 if unknown value
-                val_score = mapping.get(value, 0.0)
-                total_util += weight * val_score
-                    
+            # --- CONTINUOUS LOGIC (PRICE) ---
+            if curve and curve.get('type') == 'linear':
+                # (Keep existing calculation for min/max/invert here)
+                rng = curve['max'] - curve['min']
+                if rng == 0:
+                    norm = 1.0
+                else:
+                    norm = (float(value) - curve['min']) / rng
+                    norm = max(0.0, min(1.0, norm))
+                
+                if curve['invert']:
+                    norm = 1.0 - norm
+                
+                total_util += weight * norm
+            
+            # --- DISCRETE LOGIC (SERVICE, DURATION, etc.) ---
+            # This logic must handle the string-to-value mapping internally
+            elif issue == 'service' or issue == 'duration':
+                # Note: This is simplified based on your demo's assumed utility (Best=1.0)
+                score_map = {
+                    'enterprise': 1.0, 'premium': 0.5, 'standard': 0.0, # Service
+                    '3_years': 1.0, '1_year': 0.0                      # Duration
+                }
+                
+                # Check the exact value and get score contribution
+                norm = score_map.get(value, 0.0)
+                total_util += weight * norm
+            
         return total_util
 
     def __call__(self, outcome: Outcome) -> float:

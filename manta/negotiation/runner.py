@@ -4,9 +4,8 @@ import asyncio
 from typing import List, Optional, Any, Literal
 from pydantic import BaseModel, Field
 
-
 # Add OutcomeSpace here so the Config knows what it is
-from manta.core.outcomes import OutcomeSpace 
+from manta.core.outcomes import OutcomeSpace, Outcome
 from manta.core.agent import BaseAgent, AgentState, AgentResult
 
 # Configure logging
@@ -63,7 +62,7 @@ class Runner(BaseModel):
             except Exception as e:
                 logger.error(f"Error initializing agent {agent.name}: {e}")
                 self.state.status = "broken"
-                return
+                return self.state # Return state immediately on crash
 
         current_proposer_idx = 0
         
@@ -86,34 +85,36 @@ class Runner(BaseModel):
 
             # 3. Action - Propose
             try:
+                # FIXED: We await the async method
                 proposal_result = await proposer.propose(self._get_agent_state())
+                
+                # CRITICAL FIX: Check if agent explicitly wants to end
+                if proposal_result.response == "end":
+                    logger.info(f"Agent {proposer.name} decided to end the negotiation.")
+                    self.state.status = "broken"
+                    break
+
                 proposal = proposal_result.proposal
             except Exception as e:
                 logger.error(f"Agent {proposer.name} crashed during propose: {e}")
                 self.state.status = "broken"
                 break
 
-            # 4. Validation (Simplified: Assume valid if not None)
+            # 4. Validation
             if proposal is None:
-                # Agent passed or failed to propose
-                logger.warning(f"Agent {proposer.name} made no proposal.")
-                # Treat as end? Or skip? Let's treat as end for now if strict.
-                # For now, let's just continue and see if responder accepts 'None' (unlikely)
-                # Or maybe 'wait'.
-                pass
+                # FIXED: Do NOT continue if proposal is None. This caused the crash.
+                logger.warning(f"Agent {proposer.name} made no proposal (None). Stopping.")
+                self.state.status = "broken"
+                break
             
             # 5. Action - Respond
-            # Update state with the new offer before asking responder
-            # But wait, the responder needs to see the offer.
-            # The 'current_offer' in AgentState is the *previous* offer usually?
-            # In SAO, Proposer makes offer, Responder says Yes/No.
-            # So we pass the *new* proposal to the responder.
             
             # Let's update the state temporarily for the responder call
             temp_state = self._get_agent_state()
             temp_state.current_offer = proposal
             
             try:
+                # FIXED: We await the async method
                 response_result = await responder.respond(temp_state)
                 response = response_result.response
             except Exception as e:
@@ -125,18 +126,19 @@ class Runner(BaseModel):
             if response == "accept":
                 self.state.status = "success"
                 self.state.current_offer = proposal # Final agreement
+                # Log the final accept
+                self.state.history.append({
+                    "step": self.state.step,
+                    "proposer": proposer.name,
+                    "proposal": proposal,
+                    "responder": responder.name,
+                    "response": response
+                })
                 break
             elif response == "reject":
-                # Continue loop
                 self.state.current_offer = proposal # Update current offer on table
-                # Check for counter-proposal in response? 
-                # The spec says "Reject: Continue loop. Update current_offer if a counter-proposal was made."
-                # But SAO usually implies the next turn is the counter-proposal.
-                # If the responder provided a counter-proposal in 'data' or 'proposal' field, we could use it.
-                # But standard SAO is: A proposes -> B responds (Accept/Reject). If Reject, B becomes Proposer next turn.
-                pass
             elif response == "end":
-                self.state.status = "broken" # Or just ended without agreement
+                self.state.status = "broken"
                 break
             
             # 7. Update State
@@ -151,6 +153,9 @@ class Runner(BaseModel):
             self.state.step += 1
             # The Modulo operator (%) enforces the Alternating turn
             current_proposer_idx = (current_proposer_idx + 1) % len(self.agents)
+            
+            # Small sleep to yield control in async loop
+            await asyncio.sleep(0.01)
 
         # Cleanup
         for agent in self.agents:

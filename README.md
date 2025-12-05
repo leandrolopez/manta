@@ -4,7 +4,7 @@
 
 
 # **MANTA**
-### _**Manta: Multi-Agent Negotiation &amp; Task Automation**_
+### _**Manta: Multi Agent Negotiation &amp; Task Automation**_
 
 **MANTA** is a modern Python library for building autonomous **multi-agent systems** capable of:
 
