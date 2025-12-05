@@ -149,6 +149,7 @@ class Runner(BaseModel):
             })
             
             self.state.step += 1
+            # The Modulo operator (%) enforces the Alternating turn
             current_proposer_idx = (current_proposer_idx + 1) % len(self.agents)
 
         # Cleanup

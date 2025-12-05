@@ -1,40 +1,54 @@
-from typing import List, Any, Callable, Optional
 import random
+from typing import List, Callable, Dict, Any
+from manta.core.outcomes import OutcomeSpace, Outcome
 
 def generate_meso(
-    outcome_space: List[Any],
-    utility_function: Callable[[Any], float],
+    utility_function: Callable[[Outcome], float],
+    outcome_space: OutcomeSpace,
     target_utility: float,
     tolerance: float = 0.05,
-    size: int = 3
-) -> List[Any]:
+    max_offers: int = 3,
+    max_attempts: int = 5000
+) -> List[Outcome]:
     """
-    Generate a Multiple Equivalent Simultaneous Offer (MESO).
-    
-    Args:
-        outcome_space: List of all possible outcomes to search from.
-        utility_function: Function that maps an outcome to a utility value.
-        target_utility: The desired utility level.
-        tolerance: The allowed deviation from the target utility.
-        size: The number of outcomes to return (k).
-        
-    Returns:
-        A list of 'size' outcomes that have utility within [target - tolerance, target + tolerance].
+    Generates Multiple Equivalent Simultaneous Offers (MESO).
+    Creates random dictionary outcomes based on the OutcomeSpace rules.
     """
+    found_offers: List[Outcome] = []
     
-    candidates = []
-    
-    # 1. Search
-    for outcome in outcome_space:
-        u = utility_function(outcome)
-        if abs(u - target_utility) <= tolerance:
-            candidates.append(outcome)
+    # 1. Analyze the Space to create search ranges
+    # We create a simple sampler for each issue
+    samplers = {}
+    for issue in outcome_space.issues:
+        if issue.type == 'discrete':
+            samplers[issue.name] = lambda i=issue: random.choice(i.values)
+        else:
+            # For continuous, we sample randomly within the range
+            samplers[issue.name] = lambda i=issue: random.uniform(i.min_value, i.max_value)
             
-    # 2. Selection
-    # If we found fewer candidates than requested size, return all of them.
-    if len(candidates) <= size:
-        return candidates
+    issue_names = list(samplers.keys())
     
-    # Otherwise, select 'size' distinct outcomes.
-    # Simple random selection for now.
-    return random.sample(candidates, size)
+    # 2. Random Search Loop
+    for _ in range(max_attempts):
+        if len(found_offers) >= max_offers:
+            break
+            
+        # Build a random candidate Outcome (Dictionary)
+        candidate: Outcome = {}
+        for name in issue_names:
+            candidate[name] = samplers[name]()
+            
+        # 3. Check Utility
+        try:
+            score = utility_function(candidate)
+        except Exception:
+            continue
+            
+        # 4. Check if it matches target (Iso-Utility)
+        if abs(score - target_utility) <= tolerance:
+            # 5. Check Diversity (Avoid exact duplicates)
+            # For continuous values, exact match is rare, but good to check
+            if candidate not in found_offers:
+                found_offers.append(candidate)
+                
+    return found_offers
