@@ -6,7 +6,7 @@
 # **MANTA**
 ### _**Manta: Multi-Agent Negotiation &amp; Task Automation**_
 
-**MANTA** is a modern, modular, high-performance framework for building autonomous **multi-agent systems** capable of:
+**MANTA** is a modern Python library for building autonomous **multi-agent systems** capable of:
 
 •	Automated negotiation
 
@@ -17,8 +17,6 @@
 •	Agent-to-agent interaction protocols
 
 •	Complex workflows with autonomy and cooperation
-
-**Manta** is a modern rewrite and evolution of **NegMAS** with a focus on:
 
 •	production architecture
 
